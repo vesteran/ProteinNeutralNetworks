@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/lisc/home/user/vester/PracticalModellingProject/NeutralNetworkProtein.py", line 245, in <module>
+    main()
+    ~~~~^^
+  File "/lisc/home/user/vester/PracticalModellingProject/NeutralNetworkProtein.py", line 46, in main
+    seq = getProteinSequenceFromFile(original_pdb)
+  File "/lisc/home/user/vester/PracticalModellingProject/NeutralNetworkProtein.py", line 78, in getProteinSequenceFromFile
+    struct = pdbparser.get_structure(pdbcode, pdbPath)
+  File "/lisc/home/user/vester/.local/lib/python3.13/site-packages/Bio/PDB/PDBParser.py", line 85, in get_structure
+    with as_handle(file) as handle:
+         ~~~~~~~~~^^^^^^
+  File "/lisc/opt/sw/software/Python/3.13.1-GCCcore-14.2.0/lib/python3.13/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/lisc/home/user/vester/.local/lib/python3.13/site-packages/Bio/File.py", line 72, in as_handle
+    with open(handleish, mode, **kwargs) as fp:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '8'
