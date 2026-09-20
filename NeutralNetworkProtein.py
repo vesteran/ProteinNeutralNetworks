@@ -103,6 +103,8 @@ def main():
         for row in results:
             writer.writerow(row)
 
+    reduce_sequence(getProteinSequenceFromFile(original_pdb))
+
 # Function to extract protein sequence from PDB file
 # pdbPath: The path to the PDB file
 # pdbcode: The PDB code of the structure (default is "1LYZ")
@@ -283,6 +285,38 @@ def mutate_pdb(input_pdb, output_pdb, position, new_aa, chain_id="A"):
         )
 
     return output_pdb
+
+#Function to create as similar of a protein structure as possible with only the reduced amino acids D, G, L, and A. This is done by mutating all other amino acids to one of the reduced amino acids and then evaluating the QMean score of each mutated structure. The amino acid that results in the highest QMean score is then used to mutate the original structure.
+def reduce_sequence(seq):
+    for i in range(len(seq)):
+        if seq[i] in reduced_amino_acids:
+            continue
+        seqa = list(seq)
+        seqa[i] = 'A'
+        seqa = "".join(seqa)
+        mutate_pdb("./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced.pdb", f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_a.pdb", i, 'A', chain_id="A")
+        seqd = list(seq)
+        seqd[i] = 'D'
+        seqd = "".join(seqd)
+        mutate_pdb("./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced.pdb", f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_d.pdb", i, 'D', chain_id="A")
+        seql = list(seq)
+        seql[i] = 'L'
+        seql = "".join(seql)
+        mutate_pdb("./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced.pdb", f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_l.pdb", i, 'L', chain_id="A")
+        seqg = list(seq)
+        seqg[i] = 'G'
+        seqg = "".join(seqg)
+        mutate_pdb("./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced.pdb", f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_g.pdb", i, 'G', chain_id="A")
+
+        qmeans = {}
+        qmeans['A'] = getQMean(f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_a.pdb")
+        qmeans['D'] = getQMean(f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_d.pdb")
+        qmeans['L'] = getQMean(f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_l.pdb")
+        qmeans['G'] = getQMean(f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced_g.pdb")
+        maxqmean = max(qmeans, key=qmeans.get)
+        mutate_pdb("./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced.pdb", f"./1LYZ_Results/1LYZ_Reduced_AA/1LYZ_reduced.pdb", i, maxqmean, chain_id="A")
+
+
 
 
 
